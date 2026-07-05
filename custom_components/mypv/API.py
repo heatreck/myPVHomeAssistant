@@ -207,3 +207,8 @@ async def post_setup(
     )
 
     self._setup_cache = setup
+
+
+async def close(self):
+    await self.http.close()
+    await self.https.close()
