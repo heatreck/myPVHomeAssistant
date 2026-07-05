@@ -2,21 +2,30 @@ import asyncio
 
 from api import MyPVClient
 
+HOST = "192.168.178.146"
+PASSWORD = "DEIN_PASSWORT"
+
 
 async def main():
+    client = MyPVClient(HOST, PASSWORD)
 
-    client = MyPVClient(
-        host="192.168.178.154",
-        password="DEINPASSWORT",
-    )
+    print("Geräteinfo:")
+    info = await client.get_info()
+    print(info)
 
-    print(await client.get_info())
+    print("\nLaufzeitdaten:")
+    runtime = await client.get_runtime()
+    print(runtime)
 
-    print(await client.get_runtime())
+    print("\nLogin:")
+    success = await client.login()
+    print(success)
 
-    print(await client.login())
+    print("\nSetup:")
+    setup = await client.get_setup()
+    print(setup)
 
-    print(await client.get_setup())
+    await client.close()
 
 
 asyncio.run(main())
