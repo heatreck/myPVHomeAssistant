@@ -44,8 +44,10 @@ class MYPVDataUpdateCoordinator(DataUpdateCoordinator):
 
                 if self._data != "monitorjson":
                     self._setup = await self.async_update_setup(session)
-                    if self._setup is None:
-                        raise Exception("Could not connect to your my-PV device")
+
+        if self._setup is None:
+            _LOGGER.warning("setup.jsn could not be read - continuing without setup data")
+            self._setup = {}
 
                 data = await self.async_update_data(session)
                 if data is None:
