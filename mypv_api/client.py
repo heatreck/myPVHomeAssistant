@@ -2,14 +2,10 @@ from __future__ import annotations
 from urllib import response
 from urllib.parse import quote_plus
 from urllib.parse import quote
-
-
+from aiohttp import ClientTimeout
 import aiohttp
 import asyncio
 import ssl
-
-from aiohttp import ClientTimeout
-
 
 class MyPVClient:
 
@@ -39,7 +35,6 @@ class MyPVClient:
 )
 
     # Start Request
-
     async def request(
         self,
         protocol: str,
@@ -62,12 +57,7 @@ class MyPVClient:
         "Accept": "*/*",
         "Content-Type": "application/x-www-form-urlencoded",
 
-
     }
-        
-        print("DATA:", repr(data))
-        print("TYPE:", type(data))
-
 
         async with session.request(
             method,
@@ -111,8 +101,6 @@ class MyPVClient:
         payload = self.password.replace("?", "%3F") 
         payload = "pw=" + payload
 
-        print(repr(payload))
-
         await asyncio.sleep(2)
 
         auth_response = await self.request(
@@ -122,7 +110,7 @@ class MyPVClient:
             data=payload,
         )
 
-        print("POST Response:")
+        print("Authentication Response:")
         print(auth_response)
 
         await asyncio.sleep(2)
@@ -139,18 +127,20 @@ class MyPVClient:
 #            data=payload,
 #        )
 
-        auth = await self.request(
-            "https",
-            "GET",
-            "auth.jsn",
-        )
+# For debugging the Authentication, uncomment the following lines to check if the authentication was successful
+#
+#        auth = await self.request(
+#            "https",
+#            "GET",
+#            "auth.jsn",
+#        )
+#
+#        print(auth)
+#
+#        return auth["auth"] == 1
 
-        print(auth)
 
-        return auth["auth"] == 1
-
-
-    # Setup
+    # Get Setup
     async def get_setup(self) -> dict:
         if self._setup_cache:
             return self._setup_cache
